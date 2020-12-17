@@ -45,7 +45,7 @@ let rec readIntFromConsole readConsole writeConsole message validate =
     writeConsole message
     let userInput: string = readConsole ()
     match Int32.TryParse userInput with
-    | (true, i) ->
+    | true, i ->
         if validate i then
             i
         else
