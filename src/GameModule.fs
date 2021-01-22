@@ -11,7 +11,7 @@ type Winner = PlayerXWon | PlayerOWon | Draw
 
 type PlayTurnResult =
     | GameEnded of result: Winner * board: Board
-    | GameNotEneded of newGameState: GameState * message: string option
+    | GameNotEnded of newGameState: GameState * message: string option
 
 let getWinner board =
     if anyLineIsFullOf board CellStatus.HasX then
@@ -29,14 +29,14 @@ let switchPlayer player =
 let playTurn state rowIndex columnIndex =
     let cellValue = getCell rowIndex columnIndex state.Board
     if cellValue <> CellStatus.Empty then
-        GameNotEneded (state, Some "Cell is not empty")
+        GameNotEnded (state, Some "Cell is not empty")
     else
         let newCellValue = if state.CurrentPlayer = PlayerX then HasX else HasO
         let updatedBoard = updateCell state.Board rowIndex columnIndex newCellValue
         let winResult = getWinner updatedBoard
         match winResult with
         | Some result -> GameEnded(result, updatedBoard)
-        | None -> GameNotEneded({Board = updatedBoard; CurrentPlayer = switchPlayer state.CurrentPlayer}, None)
+        | None -> GameNotEnded({Board = updatedBoard; CurrentPlayer = switchPlayer state.CurrentPlayer}, None)
 
 let rec readIntFromConsole readConsole writeConsole message validate =
     let handleInvalid () = 
@@ -83,7 +83,7 @@ let playGame readConsole writeConsole =
                              | Draw -> "No winner!" 
             writeLine winMessage
             
-        | GameNotEneded (newState, message) ->
+        | GameNotEnded (newState, message) ->
             writeBoard newState.Board writeConsole
             match message with
             | Some m -> writeLine m
